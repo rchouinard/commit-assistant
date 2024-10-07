@@ -1,0 +1,15 @@
+*           text=auto
+
+*.go        -text diff=golang
+
+*.bash      text eol=lf diff=bash
+*.sh        text eol=lf
+
+*.md        text diff=markdown
+*.json      text
+*.yaml      text
+*.yml       text
+
+.gitattributes  export-ignore
+.gitignore      export-ignore
+.gitkeep        export-ignore
