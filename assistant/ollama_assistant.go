@@ -9,17 +9,19 @@ import (
 )
 
 type ollamaAssistant struct {
-	model string
+	baseURL string
+	model   string
 }
 
 func NewOllamaAssistant(cfg Config) *ollamaAssistant {
 	return &ollamaAssistant{
-		model: cfg.Model,
+		baseURL: cfg.BaseURL,
+		model:   cfg.Model,
 	}
 }
 
 func (ai *ollamaAssistant) GenerateMessage(ctx context.Context, diffInput string) (string, error) {
-	url, err := url.Parse("http://localhost:11434")
+	url, err := url.Parse(ai.baseURL)
 	if err != nil {
 		return "", err
 	}

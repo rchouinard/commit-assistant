@@ -29,7 +29,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		asst := assistant.NewOllamaAssistant(assistant.Config{
-			Model: "deepseek-coder-v2",
+			BaseURL: "http://localhost:11434",
+			Model:   "deepseek-coder-v2",
 		})
 		resp, err := asst.GenerateMessage(cmd.Context(), gitDiff)
 		cobra.CheckErr(err)
