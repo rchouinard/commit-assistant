@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/ollama/ollama/api"
 )
@@ -39,7 +40,9 @@ func (ai *ollamaAssistant) GenerateMessage(ctx context.Context, diffInput string
 		return "", err
 	}
 
-	httpClient := http.Client{}
+	httpClient := http.Client{
+		Timeout: time.Second * 30,
+	}
 	client := api.NewClient(url, &httpClient)
 
 	messages := []api.Message{
