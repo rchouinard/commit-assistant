@@ -13,6 +13,18 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "commit-assistant",
 	Short: "A utility to generate commit messages based on changes in a project",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		if !git.IsGitInstalled() {
+			fmt.Println("Git is not installed or not in the PATH")
+			os.Exit(1)
+		}
+
+		isRepo, _ := git.IsGitRepo()
+		if !isRepo {
+			fmt.Println("Not a git repository")
+			os.Exit(1)
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		stagedFiles, err := git.GetStagedFiles()
 		cobra.CheckErr(err)
