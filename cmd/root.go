@@ -41,8 +41,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		asst := assistant.NewOllamaAssistant(assistant.Config{
-			BaseURL: "http://localhost:11434",
-			Model:   "deepseek-coder-v2",
+			BaseURL: viper.GetString("base-url"),
+			Model:   viper.GetString("model"),
 		})
 		resp, err := asst.GenerateMessage(cmd.Context(), gitDiff)
 		cobra.CheckErr(err)
@@ -60,6 +60,16 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	rootCmd.Flags().StringP("api-key", "k", "", "")
+	rootCmd.Flags().StringP("base-url", "b", "", "")
+	rootCmd.Flags().StringP("model", "m", "", "")
+	rootCmd.Flags().StringP("provider", "p", "ollama", "")
+
+	viper.BindPFlag("api-key", rootCmd.Flags().Lookup("api-key"))
+	viper.BindPFlag("base-url", rootCmd.Flags().Lookup("base-url"))
+	viper.BindPFlag("model", rootCmd.Flags().Lookup("model"))
+	viper.BindPFlag("provider", rootCmd.Flags().Lookup("provider"))
 }
 
 func initConfig() {
@@ -69,8 +79,6 @@ func initConfig() {
 	viper.AddConfigPath(home)
 	viper.SetConfigName(".commit-assistant")
 	viper.SetConfigType("yaml")
-
-	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
 		//fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())

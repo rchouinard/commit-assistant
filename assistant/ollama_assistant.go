@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/ollama/ollama/api"
 )
@@ -14,6 +15,18 @@ type ollamaAssistant struct {
 }
 
 func NewOllamaAssistant(cfg Config) *ollamaAssistant {
+	if cfg.BaseURL == "" {
+		cfg.BaseURL = os.Getenv("OLLAMA_HOST")
+	}
+
+	if cfg.BaseURL == "" {
+		cfg.BaseURL = "http://localhost:11434"
+	}
+
+	if cfg.Model == "" {
+		cfg.Model = "mistral"
+	}
+
 	return &ollamaAssistant{
 		baseURL: cfg.BaseURL,
 		model:   cfg.Model,
